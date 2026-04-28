@@ -86,10 +86,15 @@ button { cursor: pointer; }
   margin-bottom: 12px;
 }
 
-.sidebar-brand h1 {
-  font-size: 22px;
+.sidebar-brand h1, .app-title {
+  font-size: clamp(1.1rem, 4.5vw, 1.5rem);
   font-weight: 700;
-  letter-spacing: -0.5px;
+  letter-spacing: -0.3px;
+  word-spacing: normal;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
 }
 
 .sidebar-brand h1 .accent { color: var(--accent); }
@@ -708,7 +713,13 @@ textarea.field {
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
-  .sidebar-brand h1 { font-size: 18px; }
+  .sidebar-brand h1, .app-title { font-size: clamp(1rem, 3.5vw, 1.25rem); }
+  .sidebar { width: 200px; }
+}
+
+@media (max-width: 900px) {
+  .sidebar { display: none; }
+  .bottom-nav { display: flex; }
 }
 
 @media (max-width: 768px) {
@@ -740,6 +751,7 @@ textarea.field {
 
 @media (max-width: 480px) {
   body { font-size: 15px; }
+  .sidebar-brand h1, .app-title { font-size: 1.5rem; }
   .meal-grid { grid-template-columns: 1fr 1fr; }
   .stats { grid-template-columns: repeat(2, 1fr); }
   .topbar { padding: 10px 12px; }
@@ -774,6 +786,7 @@ textarea.field {
   .water-grid { grid-template-columns: repeat(4, 1fr); }
   .meal-grid { grid-template-columns: 1fr; }
   .topbar-title { font-size: 15px; }
+  .sidebar-brand h1, .app-title { font-size: 1.25rem; }
   .icon-btn { width: 36px; height: 36px; font-size: 16px; }
   .cat-tab { padding: 6px 10px; font-size: 11px; }
 }
