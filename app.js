@@ -177,7 +177,9 @@ function goToPage(page) {
   save();
   $$('.page').forEach((p) => p.classList.toggle('active', p.id === `page-${page}`));
   $$('.nav-btn[data-page]').forEach((b) => b.classList.toggle('active', b.dataset.page === page));
-  $('#pageTitle').textContent = PAGE_TITLES[page] || page;
+  const pageLabel = PAGE_TITLES[page] || page;
+  $('#pageTitle').textContent = pageLabel;
+  document.title = `Life OS · ${pageLabel}`;
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
