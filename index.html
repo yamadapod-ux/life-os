@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1" />
+  <title>Life OS — Personal Operating System</title>
+  <meta name="description" content="ระบบจัดการชีวิตส่วนตัว — Today, Pipeline, Meals, Wellness, Goals" />
+  <meta name="theme-color" content="#0a0a0a" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Life OS" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <link rel="manifest" href="manifest.json" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/icon-192.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sarabun:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- SIDEBAR (PC) -->
+  <aside class="sidebar">
+    <div class="sidebar-brand">
+      <h1>Life<span class="accent">OS</span></h1>
+      <div class="sub">Personal Operating System</div>
+    </div>
+    <button class="nav-btn active" data-page="today"><span class="icon">📅</span><span>วันนี้</span></button>
+    <button class="nav-btn" data-page="pipeline"><span class="icon">📋</span><span>Pipeline</span></button>
+    <button class="nav-btn" data-page="meals"><span class="icon">🍱</span><span>มื้ออาหาร</span></button>
+    <button class="nav-btn" data-page="wellness"><span class="icon">💚</span><span>Wellness</span></button>
+    <button class="nav-btn" data-page="goals"><span class="icon">🎯</span><span>เป้าหมาย</span></button>
+    <div class="sidebar-footer">
+      <button class="nav-btn" id="aiBtnSide"><span class="icon">🤖</span><span>AI Assistant</span></button>
+      <button class="nav-btn" id="exportBtnSide"><span class="icon">⬇️</span><span>Export</span></button>
+      <button class="nav-btn" id="importBtnSide"><span class="icon">⬆️</span><span>Import</span></button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+    <header class="topbar">
+      <div>
+        <div class="topbar-title" id="pageTitle">วันนี้</div>
+        <div class="topbar-date" id="todayDate"></div>
+      </div>
+      <div class="topbar-actions">
+        <button class="icon-btn" id="aiBtn" title="AI Assistant">🤖</button>
+        <button class="icon-btn" id="menuBtn" title="เมนู">⋯</button>
+      </div>
+    </header>
+
+    <!-- ============ PAGE: TODAY ============ -->
+    <section class="page active" id="page-today">
+
+      <div class="stats">
+        <div class="stat"><div class="num" id="statDone">0</div><div class="label">เสร็จวันนี้</div></div>
+        <div class="stat"><div class="num" id="statTotal">0</div><div class="label">งานทั้งหมด</div></div>
+        <div class="stat"><div class="num" id="statWork">0h</div><div class="label">เวลาทำงาน</div></div>
+        <div class="stat"><div class="num" id="statWater">0/8</div><div class="label">น้ำดื่ม</div></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">⏰ ตารางเวลา <span class="badge" id="timeProgress">0%</span></div>
+          <button class="btn btn-sm" id="addTimeBlockBtn">+ เพิ่ม</button>
+        </div>
+        <div id="timeBlocks"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">🍱 มื้ออาหารวันนี้</div>
+        </div>
+        <div class="meal-grid" id="todayMeals"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">📚 CFA วันนี้</div>
+          <button class="btn btn-sm btn-ghost" id="addCfaTodayBtn">+ หัวข้อ</button>
+        </div>
+        <div id="cfaToday"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">🎬 คลิปที่ต้องทำ</div>
+          <button class="btn btn-sm btn-ghost" id="addClipTodayBtn">+ คลิป</button>
+        </div>
+        <div id="clipsToday"></div>
+      </div>
+    </section>
+
+    <!-- ============ PAGE: PIPELINE ============ -->
+    <section class="page" id="page-pipeline">
+      <div class="cat-tabs" id="catTabs">
+        <button class="cat-tab active" data-cat="all">ทั้งหมด</button>
+        <button class="cat-tab" data-cat="cfa">📚 CFA</button>
+        <button class="cat-tab" data-cat="investment">💹 Investment</button>
+        <button class="cat-tab" data-cat="content">🎬 Content</button>
+        <button class="cat-tab" data-cat="personal">🌱 Personal</button>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">📋 รายการทั้งหมด <span class="badge" id="pipeCount">0</span></div>
+          <button class="btn btn-sm" id="addPipelineBtn">+ เพิ่ม</button>
+        </div>
+        <div id="pipelineList"></div>
+      </div>
+    </section>
+
+    <!-- ============ PAGE: MEALS ============ -->
+    <section class="page" id="page-meals">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">📅 Meal Plan รายสัปดาห์</div>
+        </div>
+        <div id="weeklyMeals"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">⭐ อาหารที่ชอบ / สูตร</div>
+          <button class="btn btn-sm btn-ghost" id="addRecipeBtn">+ เพิ่ม</button>
+        </div>
+        <div id="recipeList"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">💧 น้ำดื่ม (เป้า 8 แก้ว)</div>
+          <button class="btn btn-sm btn-ghost" id="resetWaterBtn">รีเซ็ต</button>
+        </div>
+        <div class="water-grid" id="waterGrid"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">🔥 Calorie Tracker (ไม่บังคับ)</div>
+        </div>
+        <div class="row" style="gap: 10px;">
+          <input class="field" type="number" id="calInput" placeholder="กรอกแคลอรี่..." />
+          <button class="btn" id="addCalBtn">เพิ่ม</button>
+        </div>
+        <div class="mt text-dim">วันนี้: <span id="todayCal" style="color: var(--accent); font-weight: 600;">0</span> kcal</div>
+      </div>
+    </section>
+
+    <!-- ============ PAGE: WELLNESS ============ -->
+    <section class="page" id="page-wellness">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">😴 Sleep Log</div>
+        </div>
+        <div class="row" style="gap: 10px; flex-wrap: wrap;">
+          <div style="flex:1; min-width:120px;">
+            <div class="text-mute">เข้านอน</div>
+            <input class="field" type="time" id="sleepStart" />
+          </div>
+          <div style="flex:1; min-width:120px;">
+            <div class="text-mute">ตื่นนอน</div>
+            <input class="field" type="time" id="sleepEnd" />
+          </div>
+        </div>
+        <div class="mt text-dim">นอนรวม: <span id="sleepTotal" style="color: var(--accent); font-weight: 600;">— ชม.</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">😊 Mood</div>
+        </div>
+        <div class="text-mute" style="margin-bottom:6px;">ตอนเช้า</div>
+        <div class="mood-row" data-mood="morning"></div>
+        <div class="text-mute" style="margin-top:14px; margin-bottom:6px;">ตอนเย็น</div>
+        <div class="mood-row" data-mood="evening"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">⏱️ Work Hours <span class="badge" id="workBadge">0h</span></div>
+        </div>
+        <div class="row" style="gap: 10px;">
+          <input class="field" type="number" step="0.5" id="workHoursInput" placeholder="ชั่วโมงวันนี้..." />
+          <button class="btn" id="logWorkBtn">บันทึก</button>
+        </div>
+        <div class="mt" id="workWarn"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">💪 Exercise</div>
+          <button class="btn btn-sm btn-ghost" id="addExerciseBtn">+ บันทึก</button>
+        </div>
+        <div id="exerciseList"></div>
+      </div>
+    </section>
+
+    <!-- ============ PAGE: GOALS ============ -->
+    <section class="page" id="page-goals">
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">📚 CFA Roadmap</div>
+        </div>
+        <div id="cfaRoadmap"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">🎬 Content Goals</div>
+          <button class="btn btn-sm btn-ghost" id="addContentGoalBtn">+ เป้าหมาย</button>
+        </div>
+        <div id="contentGoals"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">🌱 Personal Goals</div>
+          <button class="btn btn-sm btn-ghost" id="addPersonalGoalBtn">+ เป้าหมาย</button>
+        </div>
+        <div id="personalGoals"></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">📝 Monthly Review</div>
+        </div>
+        <textarea class="field" id="monthlyReview" placeholder="เดือนนี้เป็นยังไงบ้าง? บทเรียนที่ได้? เดือนหน้าจะปรับอะไร?"></textarea>
+        <div class="mt"><button class="btn" id="saveReviewBtn">บันทึก Review</button></div>
+      </div>
+    </section>
+
+    <!-- FAB -->
+    <button class="fab" id="fab">+</button>
+  </main>
+
+  <!-- BOTTOM NAV (mobile) -->
+  <nav class="bottom-nav">
+    <button class="nav-btn active" data-page="today"><span class="icon">📅</span><span>วันนี้</span></button>
+    <button class="nav-btn" data-page="pipeline"><span class="icon">📋</span><span>Pipeline</span></button>
+    <button class="nav-btn" data-page="meals"><span class="icon">🍱</span><span>มื้อ</span></button>
+    <button class="nav-btn" data-page="wellness"><span class="icon">💚</span><span>Wellness</span></button>
+    <button class="nav-btn" data-page="goals"><span class="icon">🎯</span><span>เป้า</span></button>
+  </nav>
+
+  <!-- MODAL -->
+  <div class="modal-bg" id="modal">
+    <div class="modal">
+      <h3 id="modalTitle">เพิ่มรายการ</h3>
+      <div id="modalBody"></div>
+      <div class="modal-actions">
+        <button class="btn btn-ghost" id="modalCancel">ยกเลิก</button>
+        <button class="btn" id="modalConfirm">ตกลง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST -->
+  <div class="toast" id="toast"></div>
+
+  <!-- HIDDEN FILE INPUT -->
+  <input type="file" id="importFile" accept=".json" style="display:none" />
+
+  <script src="app.js"></script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('service-worker.js')
+          .then((reg) => console.log('SW registered:', reg.scope))
+          .catch((err) => console.warn('SW failed:', err));
+      });
+    }
+  </script>
+</body>
+</html>
