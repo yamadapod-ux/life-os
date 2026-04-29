@@ -98,8 +98,8 @@
       <div class="cat-tabs" id="catTabs">
         <button class="cat-tab active" data-cat="all">ทั้งหมด</button>
         <button class="cat-tab" data-cat="cfa">📚 CFA</button>
-        <button class="cat-tab" data-cat="investment">💹 Investment</button>
-        <button class="cat-tab" data-cat="content">🎬 Content</button>
+        <button class="cat-tab" data-cat="investment">💹 บลจ.</button>
+        <button class="cat-tab" data-cat="freelance">💼 Freelance</button>
         <button class="cat-tab" data-cat="personal">🌱 Personal</button>
       </div>
 
@@ -153,19 +153,26 @@
     <section class="page" id="page-wellness">
       <div class="section">
         <div class="section-header">
-          <div class="section-title">😴 Sleep Log</div>
+          <div class="section-title">😴 Sleep Log <span class="badge">เป้า 8 ชม.</span></div>
         </div>
         <div class="row" style="gap: 10px; flex-wrap: wrap;">
           <div style="flex:1; min-width:120px;">
-            <div class="text-mute">เข้านอน</div>
+            <div class="text-mute">เข้านอน (เป้า 00:00)</div>
             <input class="field" type="time" id="sleepStart" />
           </div>
           <div style="flex:1; min-width:120px;">
-            <div class="text-mute">ตื่นนอน</div>
+            <div class="text-mute">ตื่นนอน (เป้า 08:00)</div>
             <input class="field" type="time" id="sleepEnd" />
           </div>
         </div>
         <div class="mt text-dim">นอนรวม: <span id="sleepTotal" style="color: var(--accent); font-weight: 600;">— ชม.</span></div>
+      </div>
+
+      <div class="section">
+        <div class="section-header">
+          <div class="section-title">🍱 มื้ออาหาร (เป้า 3 มื้อ)</div>
+        </div>
+        <div id="mealCompletion"></div>
       </div>
 
       <div class="section">
@@ -188,14 +195,6 @@
         </div>
         <div class="mt" id="workWarn"></div>
       </div>
-
-      <div class="section">
-        <div class="section-header">
-          <div class="section-title">💪 Exercise</div>
-          <button class="btn btn-sm btn-ghost" id="addExerciseBtn">+ บันทึก</button>
-        </div>
-        <div id="exerciseList"></div>
-      </div>
     </section>
 
     <!-- ============ PAGE: GOALS ============ -->
@@ -209,8 +208,8 @@
 
       <div class="section">
         <div class="section-header">
-          <div class="section-title">🎬 Content Goals</div>
-          <button class="btn btn-sm btn-ghost" id="addContentGoalBtn">+ เป้าหมาย</button>
+          <div class="section-title">📊 เป้าหมาย Progress</div>
+          <button class="btn btn-sm btn-ghost" id="addContentGoalBtn">+ เพิ่ม</button>
         </div>
         <div id="contentGoals"></div>
       </div>

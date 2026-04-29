@@ -6,96 +6,112 @@ const STORE_KEY = 'life-os-data-v1';
 const TODAY_KEY = () => new Date().toISOString().slice(0, 10);
 
 /* ---------- DEFAULT / SAMPLE DATA ---------- */
+const SCHEMA_VERSION = 3;
+
 const DEFAULT_DATA = {
-  timeBlocks: {
-    /* keyed by date YYYY-MM-DD */
-  },
-  meals: {
-    /* keyed by date */
-  },
+  schemaVersion: SCHEMA_VERSION,
+  timeBlocks: {},
+  meals: {},
   cfaToday: {},
   clipsToday: {},
-  pipeline: [
-    { id: 1, cat: 'cfa', title: 'CFA Level 1 — Ethics', deadline: '', note: 'Reading 1-4', done: false },
-    { id: 2, cat: 'cfa', title: 'CFA Level 1 — Quantitative Methods', deadline: '', note: 'Reading 5-12', done: false },
-    { id: 3, cat: 'investment', title: 'ติดตาม PTT', deadline: '', note: 'รอผลประกอบการ Q1', done: false },
-    { id: 4, cat: 'investment', title: 'ติดตาม CPALL', deadline: '', note: 'แนวโน้มปลายปี', done: false },
-    { id: 5, cat: 'content', title: 'คลิป: สรุป CFA Ethics ใน 10 นาที', deadline: '', note: 'Outline + Script', done: false },
-    { id: 6, cat: 'content', title: 'คลิป: รีวิวหุ้น Top 5 ปี 2026', deadline: '', note: '', done: false },
-    { id: 7, cat: 'content', title: 'คลิป: AI กับนักลงทุน', deadline: '', note: '', done: false },
-    { id: 8, cat: 'content', title: 'คลิป: How to อ่านงบการเงิน', deadline: '', note: '', done: false },
-    { id: 9, cat: 'content', title: 'คลิป: ETF vs Mutual Fund', deadline: '', note: '', done: false },
-    { id: 10, cat: 'personal', title: 'ออกกำลังกาย 3 ครั้ง/สัปดาห์', deadline: '', note: '', done: false }
-  ],
+  pipeline: [],
   recipes: [
-    { id: 1, name: 'ข้าวกล้อง + ไก่ย่าง', kcal: 450, note: 'Protein สูง คุมแคล' },
-    { id: 2, name: 'สลัดอกไก่', kcal: 350, note: 'อาหารเย็นเบาๆ' },
-    { id: 3, name: 'โอ๊ตมีล + กล้วย', kcal: 280, note: 'อาหารเช้าง่าย' }
+    { id: 1, name: 'ไข่ต้ม 2 ฟอง + ข้าวโอ๊ต', meal: 'breakfast', note: 'Protein + complex carb' },
+    { id: 2, name: 'ไข่คน + ขนมปังโฮลวีต', meal: 'breakfast', note: '' },
+    { id: 3, name: 'กรีกโยเกิร์ต + กล้วย + อัลมอนด์', meal: 'breakfast', note: '' },
+    { id: 4, name: 'โอ๊ตมีล + นมไม่หวาน + ผลไม้', meal: 'breakfast', note: '' },
+    { id: 5, name: 'แซนวิชอกไก่ + ผักสด', meal: 'breakfast', note: '' },
+    { id: 6, name: 'ไข่ดาว + ข้าวกล้อง 1 ทัพพี', meal: 'breakfast', note: '' },
+
+    { id: 10, name: 'อกไก่ย่าง + สลัด', meal: 'lunch', note: 'Protein + veggies' },
+    { id: 11, name: 'ปลาแซลมอนย่าง + ผักนึ่ง', meal: 'lunch', note: '' },
+    { id: 12, name: 'ข้าวกล้อง + ไก่อบ + ผัก', meal: 'lunch', note: '' },
+    { id: 13, name: 'สเต็กเนื้อไม่ติดมัน + บร็อคโคลี่', meal: 'lunch', note: '' },
+    { id: 14, name: 'ก๋วยเตี๋ยวไก่ (ไม่ใส่น้ำตาล)', meal: 'lunch', note: '' },
+    { id: 15, name: 'ส้มตำไก่ย่าง', meal: 'lunch', note: 'ไม่ใส่น้ำปลาร้า' },
+    { id: 16, name: 'โจ๊กไก่ (ไม่ใส่ปาท่องโก๋)', meal: 'lunch', note: '' },
+
+    { id: 20, name: 'ปลานึ่ง + ผักลวก', meal: 'dinner', note: 'เบาๆ protein + veggies' },
+    { id: 21, name: 'อกไก่ย่าง + สลัดผัก', meal: 'dinner', note: '' },
+    { id: 22, name: 'ต้มจืดเต้าหู้หมูสับ', meal: 'dinner', note: '' },
+    { id: 23, name: 'แกงจืดผักไก่', meal: 'dinner', note: '' },
+    { id: 24, name: 'สลัดทูน่า', meal: 'dinner', note: '' },
+    { id: 25, name: 'ไข่ตุ๋น + ผัก', meal: 'dinner', note: '' },
+    { id: 26, name: 'ปลาเผา + น้ำจิ้มซีฟู้ด', meal: 'dinner', note: '' },
+
+    { id: 30, name: 'กรีกโยเกิร์ต', meal: 'snack', note: '' },
+    { id: 31, name: 'แอปเปิ้ล / ส้ม / ฝรั่ง', meal: 'snack', note: '' },
+    { id: 32, name: 'อัลมอนด์ 10-15 เม็ด', meal: 'snack', note: '' },
+    { id: 33, name: 'ไข่ต้ม', meal: 'snack', note: '' },
+    { id: 34, name: 'ดาร์กช็อกโกแลต 70%+ 1 เหลี่ยม', meal: 'snack', note: '' }
   ],
   weeklyMeals: {},
   water: {},
-  calories: {},
   sleep: {},
   mood: {},
   workHours: {},
-  exercise: [],
   cfaRoadmap: [
-    { id: 1, level: 'Level 1', topic: 'Ethics & Professional Standards', progress: 0 },
-    { id: 2, level: 'Level 1', topic: 'Quantitative Methods', progress: 0 },
-    { id: 3, level: 'Level 1', topic: 'Economics', progress: 0 },
-    { id: 4, level: 'Level 1', topic: 'Financial Reporting & Analysis', progress: 0 },
-    { id: 5, level: 'Level 1', topic: 'Corporate Issuers', progress: 0 },
-    { id: 6, level: 'Level 1', topic: 'Equity Investments', progress: 0 },
-    { id: 7, level: 'Level 1', topic: 'Fixed Income', progress: 0 },
-    { id: 8, level: 'Level 1', topic: 'Derivatives', progress: 0 },
-    { id: 9, level: 'Level 1', topic: 'Alternative Investments', progress: 0 },
-    { id: 10, level: 'Level 1', topic: 'Portfolio Management', progress: 0 },
-    { id: 11, level: 'Level 2', topic: 'Item Set Practice (รอ Level 1 ผ่าน)', progress: 0 },
-    { id: 12, level: 'Level 3', topic: 'Constructed Response (เป้าระยะยาว)', progress: 0 }
+    { id: 1, level: 'Level 1', topic: 'Ethics & Professional Standards', progress: 0, current: false },
+    { id: 2, level: 'Level 1', topic: 'Quantitative Methods', progress: 10, current: true },
+    { id: 3, level: 'Level 1', topic: 'Economics', progress: 0, current: false },
+    { id: 4, level: 'Level 1', topic: 'Financial Reporting & Analysis', progress: 0, current: false },
+    { id: 5, level: 'Level 1', topic: 'Corporate Issuers', progress: 0, current: false },
+    { id: 6, level: 'Level 1', topic: 'Equity Investments', progress: 0, current: false },
+    { id: 7, level: 'Level 1', topic: 'Fixed Income', progress: 0, current: false },
+    { id: 8, level: 'Level 1', topic: 'Derivatives', progress: 0, current: false },
+    { id: 9, level: 'Level 1', topic: 'Alternative Investments', progress: 0, current: false },
+    { id: 10, level: 'Level 1', topic: 'Portfolio Management', progress: 0, current: false }
   ],
   contentGoals: [
-    { id: 1, title: 'Subscribers — 10,000', target: 10000, current: 0 },
-    { id: 2, title: 'Total Views — 1,000,000', target: 1000000, current: 0 },
-    { id: 3, title: 'อัพคลิป 4 ตอน/เดือน', target: 4, current: 0 }
+    { id: 1, title: 'CFA Level 1 — เนื้อหาที่จบ', target: 10, current: 0 },
+    { id: 2, title: 'ลดน้ำหนัก — เป้า (กก.)', target: 15, current: 0 },
+    { id: 3, title: 'งาน Freelance — งานสำเร็จ', target: 20, current: 0 },
+    { id: 4, title: 'บลจ. — หุ้นที่วิเคราะห์', target: 100, current: 0 }
   ],
   personalGoals: [
-    { id: 1, title: 'อ่านหนังสือ 12 เล่ม/ปี', target: 12, current: 0 },
-    { id: 2, title: 'นั่งสมาธิ 100 วันรวด', target: 100, current: 0 }
+    { id: 1, title: 'คุมอาหาร 3 มื้อ ต่อเนื่อง (วัน)', target: 90, current: 0 },
+    { id: 2, title: 'เรียน CFA 3 ชม./วัน ต่อเนื่อง (วัน)', target: 90, current: 0 }
   ],
   monthlyReview: '',
   uiState: { activePage: 'today', activeCat: 'all' }
 };
 
-/* ---------- SAMPLE TIME BLOCKS / MEALS / CFA / CLIPS for TODAY ---------- */
+/* ---------- DEFAULT DAILY SCHEDULE (real, not sample) ---------- */
+function defaultDailySchedule() {
+  return [
+    { id: 1, time: '08:00', task: 'ตื่นนอน + ดื่มน้ำ', done: false },
+    { id: 2, time: '08:30', task: 'อาหารเช้า (ลดน้ำหนัก)', done: false },
+    { id: 3, time: '09:00', task: 'เรียน CFA — Quantitative Methods', done: false },
+    { id: 4, time: '12:00', task: 'อาหารกลางวัน (ลดน้ำหนัก)', done: false },
+    { id: 5, time: '13:00', task: 'พัก / วิเคราะห์หุ้นกับ บลจ.', done: false },
+    { id: 6, time: '15:00', task: 'งาน Freelance', done: false },
+    { id: 7, time: '19:00', task: 'อาหารเย็น (ลดน้ำหนัก)', done: false },
+    { id: 8, time: '20:00', task: 'งาน Freelance ต่อ', done: false },
+    { id: 9, time: '23:30', task: 'นอน (เป้า 24:00)', done: false }
+  ];
+}
+
+function defaultMeals() {
+  return {
+    breakfast: 'ไข่ต้ม 2 ฟอง + ข้าวโอ๊ต',
+    lunch: 'อกไก่ย่าง + สลัด',
+    dinner: 'ปลานึ่ง + ผักลวก',
+    snack: 'กรีกโยเกิร์ต / ผลไม้'
+  };
+}
+
 function buildSampleToday() {
   const t = TODAY_KEY();
   return {
-    timeBlocks: {
-      [t]: [
-        { id: 1, time: '06:00', task: 'ตื่นนอน + ดื่มน้ำเปล่า', done: false },
-        { id: 2, time: '07:00', task: 'ออกกำลังกาย 30 นาที', done: false },
-        { id: 3, time: '08:00', task: 'อ่านข่าวเศรษฐกิจ + กาแฟ', done: false },
-        { id: 4, time: '09:00', task: 'CFA — Ethics Reading 1', done: false },
-        { id: 5, time: '13:00', task: 'ทำงาน — เขียน Script คลิป', done: false },
-        { id: 6, time: '16:00', task: 'อัด/ตัดต่อคลิป', done: false },
-        { id: 7, time: '19:00', task: 'อ่านหนังสือ 30 นาที', done: false },
-        { id: 8, time: '22:00', task: 'จัดเตรียมพรุ่งนี้ + เข้านอน', done: false }
-      ]
-    },
-    meals: {
-      [t]: { breakfast: 'โอ๊ตมีล + กล้วย', lunch: 'ข้าวกล้อง + ไก่ย่าง', dinner: 'สลัดอกไก่', snack: 'กรีกโยเกิร์ต' }
-    },
+    timeBlocks: { [t]: defaultDailySchedule() },
+    meals: { [t]: defaultMeals() },
     cfaToday: {
       [t]: [
-        { id: 1, topic: 'Ethics — Reading 1: Code of Ethics', done: false },
-        { id: 2, topic: 'Practice Q&A — 20 ข้อ', done: false }
+        { id: 1, topic: 'Quantitative Methods — Reading หลักวันนี้', done: false },
+        { id: 2, topic: 'Practice Q — 20 ข้อ', done: false }
       ]
     },
-    clipsToday: {
-      [t]: [
-        { id: 1, title: 'สรุป CFA Ethics ใน 10 นาที', stage: 'เขียน script', done: false }
-      ]
-    },
+    clipsToday: { [t]: [] },
     weeklyMeals: buildSampleWeeklyMeals()
   };
 }
@@ -104,13 +120,11 @@ function buildSampleWeeklyMeals() {
   const days = ['จันทร์', 'อังคาร', 'พุธ', 'พฤหัส', 'ศุกร์', 'เสาร์', 'อาทิตย์'];
   const out = {};
   const samples = [
-    { breakfast: 'โอ๊ตมีล + กล้วย', lunch: 'ข้าวกล้อง + ไก่ย่าง', dinner: 'สลัดอกไก่' },
-    { breakfast: 'ไข่ดาว + ขนมปัง', lunch: 'ก๋วยเตี๋ยวไก่', dinner: 'ปลานึ่ง + ผักลวก' },
-    { breakfast: 'สมูทตี้ผลไม้', lunch: 'ข้าวมันไก่ (เลือกอกไก่)', dinner: 'ต้มจืดเต้าหู้หมูสับ' }
+    { breakfast: 'ไข่ต้ม 2 ฟอง + ข้าวโอ๊ต', lunch: 'อกไก่ย่าง + สลัด', dinner: 'ปลานึ่ง + ผักลวก' },
+    { breakfast: 'ไข่คน + ขนมปังโฮลวีต', lunch: 'ข้าวกล้อง + ไก่อบ', dinner: 'ต้มจืดเต้าหู้หมูสับ' },
+    { breakfast: 'กรีกโยเกิร์ต + กล้วย + อัลมอนด์', lunch: 'แซลมอนย่าง + ผักนึ่ง', dinner: 'สลัดทูน่า' }
   ];
-  days.forEach((d, i) => {
-    out[d] = samples[i % samples.length];
-  });
+  days.forEach((d, i) => { out[d] = samples[i % samples.length]; });
   return out;
 }
 
@@ -132,7 +146,40 @@ function saveData(d) {
   } catch (e) { console.warn('save failed', e); }
 }
 
-let DATA = loadData();
+function migrateData(d) {
+  if (!d.schemaVersion || d.schemaVersion < SCHEMA_VERSION) {
+    if (!d.schemaVersion || d.schemaVersion < 2) {
+      d.pipeline = [];
+      d.recipes = JSON.parse(JSON.stringify(DEFAULT_DATA.recipes));
+      d.cfaRoadmap = JSON.parse(JSON.stringify(DEFAULT_DATA.cfaRoadmap));
+      d.contentGoals = JSON.parse(JSON.stringify(DEFAULT_DATA.contentGoals));
+      d.personalGoals = JSON.parse(JSON.stringify(DEFAULT_DATA.personalGoals));
+      d.weeklyMeals = buildSampleWeeklyMeals();
+
+      const t = TODAY_KEY();
+      d.timeBlocks = d.timeBlocks || {};
+      d.timeBlocks[t] = defaultDailySchedule();
+      d.meals = d.meals || {};
+      d.meals[t] = defaultMeals();
+
+      delete d.exercise;
+      delete d.calories;
+    }
+
+    if (d.schemaVersion < 3) {
+      // rename pipeline category 'content' → 'freelance'
+      if (Array.isArray(d.pipeline)) {
+        d.pipeline.forEach((p) => { if (p.cat === 'content') p.cat = 'freelance'; });
+      }
+    }
+
+    d.schemaVersion = SCHEMA_VERSION;
+    saveData(d);
+  }
+  return d;
+}
+
+let DATA = migrateData(loadData());
 const save = () => saveData(DATA);
 
 /* ---------- HELPERS ---------- */
@@ -408,7 +455,7 @@ function renderPipeline() {
       const cls = dl < 0 ? 'urgent' : dl <= 3 ? 'urgent' : dl <= 7 ? 'soon' : '';
       dlText = `<span class="deadline ${cls}">⏰ ${dl < 0 ? 'เลย ' + Math.abs(dl) + ' วัน' : 'อีก ' + dl + ' วัน'}</span>`;
     }
-    const catLabels = { cfa: '📚 CFA', investment: '💹 Investment', content: '🎬 Content', personal: '🌱 Personal' };
+    const catLabels = { cfa: '📚 CFA', investment: '💹 บลจ.', freelance: '💼 Freelance', personal: '🌱 Personal' };
     return `
       <div class="task-card" data-id="${p.id}" data-cat="${p.cat}" draggable="true">
         <div class="title">
@@ -492,8 +539,8 @@ function openPipelineModal(item) {
     <div class="text-mute">หมวด</div>
     <select class="field" id="pCat">
       <option value="cfa">📚 CFA</option>
-      <option value="investment">💹 Investment</option>
-      <option value="content">🎬 Content</option>
+      <option value="investment">💹 บลจ.</option>
+      <option value="freelance">💼 Freelance</option>
       <option value="personal">🌱 Personal</option>
     </select>
     <div class="text-mute mt-sm">ชื่อ</div>
@@ -554,20 +601,30 @@ function renderRecipes() {
     root.innerHTML = '<div class="text-mute" style="padding:12px;text-align:center;">ยังไม่มีสูตร</div>';
     return;
   }
-  root.innerHTML = DATA.recipes.map((r) => `
-    <div class="task-card" data-id="${r.id}">
-      <div class="title">
-        <span>${escape(r.name)}</span>
-        <span class="text-mute" style="font-size:13px;">${r.kcal || 0} kcal</span>
-      </div>
-      <div class="text-dim">${escape(r.note || '')}</div>
-      <div class="meta mt-sm">
-        <span style="margin-left:auto; display:flex; gap:6px;">
-          <button class="btn btn-sm btn-ghost" data-act="del" style="color:var(--danger);">ลบ</button>
-        </span>
-      </div>
-    </div>
-  `).join('');
+  const groups = [
+    { key: 'breakfast', label: '🌅 เช้า — protein + complex carb' },
+    { key: 'lunch', label: '☀️ กลางวัน — protein + veggies' },
+    { key: 'dinner', label: '🌙 เย็น — เบาๆ protein + veggies' },
+    { key: 'snack', label: '🍎 ของว่าง' }
+  ];
+  root.innerHTML = groups.map((g) => {
+    const items = DATA.recipes.filter((r) => (r.meal || 'snack') === g.key);
+    if (!items.length) return '';
+    return `
+      <div class="text-mute" style="margin: 12px 0 6px; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;">${g.label}</div>
+      ${items.map((r) => `
+        <div class="task-card" data-id="${r.id}">
+          <div class="title"><span>${escape(r.name)}</span></div>
+          ${r.note ? `<div class="text-dim">${escape(r.note)}</div>` : ''}
+          <div class="meta mt-sm">
+            <span style="margin-left:auto; display:flex; gap:6px;">
+              <button class="btn btn-sm btn-ghost" data-act="del" style="color:var(--danger);">ลบ</button>
+            </span>
+          </div>
+        </div>
+      `).join('')}
+    `;
+  }).join('');
   root.onclick = (e) => {
     const btn = e.target.closest('[data-act="del"]');
     if (!btn) return;
@@ -578,14 +635,22 @@ function renderRecipes() {
 }
 
 $('#addRecipeBtn').addEventListener('click', () => {
-  openModal('เพิ่มสูตร/อาหารโปรด', `
-    <input class="field" type="text" id="rName" placeholder="ชื่ออาหาร..." />
-    <input class="field mt-sm" type="number" id="rKcal" placeholder="แคลอรี่ (ไม่บังคับ)" />
-    <input class="field mt-sm" type="text" id="rNote" placeholder="หมายเหตุ" />
+  openModal('เพิ่มเมนูอาหาร', `
+    <div class="text-mute">มื้อ</div>
+    <select class="field" id="rMeal">
+      <option value="breakfast">🌅 เช้า</option>
+      <option value="lunch">☀️ กลางวัน</option>
+      <option value="dinner">🌙 เย็น</option>
+      <option value="snack">🍎 ของว่าง</option>
+    </select>
+    <div class="text-mute mt-sm">ชื่ออาหาร</div>
+    <input class="field" type="text" id="rName" placeholder="เช่น อกไก่ย่าง + สลัด" />
+    <div class="text-mute mt-sm">หมายเหตุ (ไม่บังคับ)</div>
+    <input class="field" type="text" id="rNote" />
   `, () => {
     const name = $('#rName').value.trim();
     if (!name) return false;
-    DATA.recipes.push({ id: uid(), name, kcal: Number($('#rKcal').value) || 0, note: $('#rNote').value.trim() });
+    DATA.recipes.push({ id: uid(), name, meal: $('#rMeal').value, note: $('#rNote').value.trim() });
     save(); renderRecipes(); toast('เพิ่มแล้ว');
   });
 });
@@ -616,23 +681,6 @@ function renderWater() {
 
 $('#resetWaterBtn').addEventListener('click', () => {
   DATA.water[TODAY_KEY()] = 0; save(); renderWater(); updateTodayStats(); toast('รีเซ็ตน้ำดื่ม');
-});
-
-/* ---------- CALORIES ---------- */
-function getTodayCal() {
-  const t = TODAY_KEY();
-  if (typeof DATA.calories[t] !== 'number') DATA.calories[t] = 0;
-  return DATA.calories[t];
-}
-
-function renderCal() { $('#todayCal').textContent = getTodayCal(); }
-
-$('#addCalBtn').addEventListener('click', () => {
-  const v = Number($('#calInput').value) || 0;
-  if (v <= 0) return;
-  DATA.calories[TODAY_KEY()] = getTodayCal() + v;
-  $('#calInput').value = '';
-  save(); renderCal(); toast(`+${v} kcal`);
 });
 
 /* ---------- WELLNESS ---------- */
@@ -714,42 +762,27 @@ $('#logWorkBtn').addEventListener('click', () => {
   save(); renderWork(); toast(`+${v} ชม.`);
 });
 
-/* EXERCISE */
-function renderExercise() {
-  const list = (DATA.exercise || []).slice().reverse().slice(0, 10);
-  const root = $('#exerciseList');
-  if (!list.length) { root.innerHTML = '<div class="text-mute" style="padding:12px;text-align:center;">ยังไม่มีบันทึก</div>'; return; }
-  root.innerHTML = list.map((e) => `
-    <div class="time-block" style="grid-template-columns: 80px 1fr auto;">
-      <div class="tb-time">${e.date}</div>
-      <div class="tb-task">💪 ${escape(e.activity)} <span class="text-mute">${e.minutes} นาที</span></div>
-      <div class="tb-actions">
-        <button class="icon-btn" data-id="${e.id}" data-act="del" style="width:32px;height:32px;font-size:14px;color:var(--danger);">×</button>
-      </div>
+/* MEAL COMPLETION (count meals logged today) */
+function renderMealCompletion() {
+  const m = getTodayMeals();
+  const main = ['breakfast', 'lunch', 'dinner'];
+  const done = main.filter((k) => (m[k] || '').trim().length > 0).length;
+  const root = $('#mealCompletion');
+  if (!root) return;
+  const labels = { breakfast: 'เช้า', lunch: 'กลางวัน', dinner: 'เย็น' };
+  root.innerHTML = `
+    <div class="row" style="gap:8px;flex-wrap:wrap;justify-content:space-between;">
+      <div class="text-dim">มื้อหลักวันนี้</div>
+      <div style="font-weight:600;color:${done === 3 ? 'var(--accent)' : 'var(--text)'};">${done} / 3 ${done === 3 ? '✓' : ''}</div>
     </div>
-  `).join('');
-  root.onclick = (ev) => {
-    const btn = ev.target.closest('[data-act="del"]');
-    if (!btn) return;
-    const id = Number(btn.dataset.id);
-    DATA.exercise = DATA.exercise.filter((x) => x.id !== id);
-    save(); renderExercise(); toast('ลบแล้ว');
-  };
+    <div class="row mt-sm" style="gap:6px;flex-wrap:wrap;">
+      ${main.map((k) => {
+        const ok = (m[k] || '').trim().length > 0;
+        return `<span style="padding:4px 10px;border-radius:999px;font-size:12px;background:${ok ? 'var(--accent-glow)' : 'var(--bg-elev-2)'};color:${ok ? 'var(--accent)' : 'var(--text-mute)'};">${ok ? '✓' : '○'} ${labels[k]}</span>`;
+      }).join('')}
+    </div>
+  `;
 }
-
-$('#addExerciseBtn').addEventListener('click', () => {
-  openModal('บันทึกออกกำลังกาย', `
-    <input class="field" type="text" id="exAct" placeholder="กิจกรรม เช่น วิ่ง, ยกเวท" />
-    <input class="field mt-sm" type="number" id="exMin" placeholder="นาที" />
-  `, () => {
-    const a = $('#exAct').value.trim();
-    const m = Number($('#exMin').value) || 0;
-    if (!a || m <= 0) return false;
-    DATA.exercise = DATA.exercise || [];
-    DATA.exercise.push({ id: uid(), date: TODAY_KEY().slice(5), activity: a, minutes: m });
-    save(); renderExercise(); toast('บันทึกแล้ว');
-  });
-});
 
 /* ---------- GOALS ---------- */
 function renderCfaRoadmap() {
@@ -1075,8 +1108,8 @@ $('#fab').addEventListener('click', () => {
   if (p === 'today') openTimeBlockModal(null);
   else if (p === 'pipeline') openPipelineModal(null);
   else if (p === 'meals') $('#addRecipeBtn').click();
-  else if (p === 'wellness') $('#addExerciseBtn').click();
   else if (p === 'goals') $('#addPersonalGoalBtn').click();
+  else openTimeBlockModal(null);
 });
 
 /* ---------- NAV BINDINGS ---------- */
@@ -1143,18 +1176,16 @@ function renderAll() {
   renderWeeklyMeals();
   renderRecipes();
   renderWater();
-  renderCal();
   renderSleepInputs();
   renderMood();
   renderWork();
-  renderExercise();
+  renderMealCompletion();
   renderCfaRoadmap();
   renderContentGoals();
   renderPersonalGoals();
   $('#monthlyReview').value = DATA.monthlyReview || '';
   updateTodayStats();
   goToPage(DATA.uiState.activePage || 'today');
-  // restore active cat tab
   $$('#catTabs .cat-tab').forEach((t) => t.classList.toggle('active', t.dataset.cat === DATA.uiState.activeCat));
 }
 
