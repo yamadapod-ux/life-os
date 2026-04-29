@@ -204,6 +204,7 @@
         <button class="cat-tab active" data-tool="calc">🧮 Calculator</button>
         <button class="cat-tab" data-tool="flash">🃏 Flashcard</button>
         <button class="cat-tab" data-tool="quiz">📝 Quiz</button>
+        <button class="cat-tab" data-tool="formula">📐 สูตร</button>
       </div>
 
       <!-- TOOL 1: CALCULATOR -->
@@ -302,6 +303,146 @@
             <button class="btn btn-sm btn-ghost" id="flashReset">Reset</button>
           </div>
         </div>
+      </div>
+
+      <!-- TOOL 4: FORMULA SHEET -->
+      <div id="cfaTool-formula" class="cfa-tool" style="display:none">
+
+        <!-- TEST STATISTICS -->
+        <div class="section">
+          <div class="section-header"><div class="section-title">📐 Test Statistics</div></div>
+
+          <div class="fml-card" style="border-left-color:var(--info);">
+            <div class="fml-name">t-test <span class="fml-tag">unknown σ</span></div>
+            <div class="fml-eq">t = (x̄ − μ₀) / (s / √n)</div>
+            <div class="fml-sub">df = n − 1 &nbsp;|&nbsp; SE = s / √n</div>
+          </div>
+
+          <div class="fml-card" style="border-left-color:var(--warn);">
+            <div class="fml-name">z-test mean <span class="fml-tag">known σ หรือ n ≥ 30</span></div>
+            <div class="fml-eq">z = (x̄ − μ₀) / (σ / √n)</div>
+            <div class="fml-sub">SE = σ / √n</div>
+          </div>
+
+          <div class="fml-card" style="border-left-color:var(--accent);">
+            <div class="fml-name">z-test proportion <span class="fml-tag">binary data</span></div>
+            <div class="fml-eq">z = (p̂ − p₀) / √[p₀(1−p₀) / n]</div>
+            <div class="fml-sub">SE = √[p₀(1−p₀) / n]</div>
+          </div>
+
+          <div class="fml-card" style="border-left-color:var(--danger);">
+            <div class="fml-name">Confidence Interval</div>
+            <div class="fml-eq">CI = x̄ ± t<sub>α/2, df</sub> × (s / √n)</div>
+            <div class="fml-sub">ถ้า μ₀ อยู่นอก 95% CI → Reject H₀ ที่ α = 0.05</div>
+          </div>
+        </div>
+
+        <!-- DECISION RULES -->
+        <div class="section">
+          <div class="section-header"><div class="section-title">⚖️ Decision Rules</div></div>
+
+          <div class="fml-rule-grid">
+            <div class="fml-rule">
+              <div class="fml-rule-head">Two-Tailed<br><span style="color:var(--text-mute);font-size:11px;">H₁: μ ≠ μ₀</span></div>
+              <div class="fml-rule-body">Reject H₀ ถ้า<br><strong>|t| &gt; t<sub>α/2, df</sub></strong></div>
+            </div>
+            <div class="fml-rule">
+              <div class="fml-rule-head">Upper One-Tail<br><span style="color:var(--text-mute);font-size:11px;">H₁: μ &gt; μ₀</span></div>
+              <div class="fml-rule-body">Reject H₀ ถ้า<br><strong>t &gt; t<sub>α, df</sub></strong></div>
+            </div>
+            <div class="fml-rule">
+              <div class="fml-rule-head">Lower One-Tail<br><span style="color:var(--text-mute);font-size:11px;">H₁: μ &lt; μ₀</span></div>
+              <div class="fml-rule-body">Reject H₀ ถ้า<br><strong>t &lt; −t<sub>α, df</sub></strong></div>
+            </div>
+            <div class="fml-rule" style="border-color:var(--accent);">
+              <div class="fml-rule-head">p-value Rule<br><span style="color:var(--text-mute);font-size:11px;">ใช้ได้ทุกกรณี</span></div>
+              <div class="fml-rule-body">Reject H₀ ถ้า<br><strong style="color:var(--accent);">p &lt; α</strong></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- CRITICAL VALUES TABLE -->
+        <div class="section">
+          <div class="section-header"><div class="section-title">📊 Critical Values — z</div></div>
+          <div style="overflow-x:auto;">
+            <table class="fml-table">
+              <thead>
+                <tr><th>α</th><th>One-tail</th><th>Two-tail</th><th>ใช้บ่อย</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>10%</td><td>1.282</td><td>1.645</td><td class="fml-td-note">—</td></tr>
+                <tr class="fml-row-hl"><td>5%</td><td><strong>1.645</strong></td><td><strong>1.960</strong></td><td class="fml-td-note">★ ใช้บ่อยที่สุด</td></tr>
+                <tr><td>1%</td><td>2.326</td><td><strong>2.576</strong></td><td class="fml-td-note">เข้มงวด</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- t CRITICAL VALUES TABLE -->
+        <div class="section">
+          <div class="section-header"><div class="section-title">📊 Critical Values — t (two-tailed)</div></div>
+          <div style="overflow-x:auto;">
+            <table class="fml-table">
+              <thead>
+                <tr><th>df</th><th>α = 10%</th><th>α = 5%</th><th>α = 1%</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>10</td><td>1.812</td><td>2.228</td><td>3.169</td></tr>
+                <tr><td>20</td><td>1.725</td><td>2.086</td><td>2.845</td></tr>
+                <tr class="fml-row-hl"><td><strong>24</strong></td><td>1.711</td><td><strong>2.064</strong></td><td>2.797</td></tr>
+                <tr><td>30</td><td>1.697</td><td>2.042</td><td>2.750</td></tr>
+                <tr><td>60</td><td>1.671</td><td>2.000</td><td>2.660</td></tr>
+                <tr><td>120</td><td>1.658</td><td>1.980</td><td>2.617</td></tr>
+                <tr style="color:var(--accent);"><td>∞</td><td>1.645</td><td>1.960</td><td>2.576</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="fml-note-box">df → ∞: t-distribution = standard normal (z)</div>
+        </div>
+
+        <!-- ERRORS & POWER -->
+        <div class="section">
+          <div class="section-header"><div class="section-title">⚠️ Errors &amp; Power</div></div>
+
+          <div class="fml-2col">
+            <div class="fml-error-card" style="border-color:var(--danger);">
+              <div class="fml-error-title" style="color:var(--danger);">Type I Error</div>
+              <div class="fml-error-eq">P = α</div>
+              <div class="fml-error-desc">Reject H₀<br>ทั้งที่ H₀ จริง<br><em>(False Positive)</em></div>
+            </div>
+            <div class="fml-error-card" style="border-color:var(--warn);">
+              <div class="fml-error-title" style="color:var(--warn);">Type II Error</div>
+              <div class="fml-error-eq">P = β</div>
+              <div class="fml-error-desc">Fail to Reject<br>ทั้งที่ H₀ เท็จ<br><em>(False Negative)</em></div>
+            </div>
+          </div>
+
+          <div class="fml-card" style="border-left-color:var(--accent);margin-top:10px;">
+            <div class="fml-name">Power of Test</div>
+            <div class="fml-eq">Power = 1 − β</div>
+            <div class="fml-sub">Power ↑ เมื่อ: n↑ &nbsp;|&nbsp; α↑ &nbsp;|&nbsp; Effect size↑ &nbsp;|&nbsp; σ↓</div>
+          </div>
+
+          <div class="fml-note-box" style="margin-top:10px;">
+            α ↓ → Type I Error ↓ แต่ Type II Error ↑ (tradeoff)<br>
+            n ↑ → ลดทั้ง Type II Error และเพิ่ม Power โดยไม่กระทบ α
+          </div>
+        </div>
+
+        <!-- QUICK REFERENCE -->
+        <div class="section">
+          <div class="section-header"><div class="section-title">⚡ Quick Reference</div></div>
+          <div style="display:flex;flex-direction:column;gap:6px;">
+            <div class="fml-qr"><span class="fml-qr-k">Standard Error</span><span class="fml-qr-v">SE = s/√n &nbsp;→&nbsp; n×4 ทำให้ SE ÷ 2</span></div>
+            <div class="fml-qr"><span class="fml-qr-k">Degrees of freedom</span><span class="fml-qr-v">one-sample = n−1 &nbsp;|&nbsp; two-sample = n₁+n₂−2</span></div>
+            <div class="fml-qr"><span class="fml-qr-k">ใช้ t หรือ z?</span><span class="fml-qr-v">ไม่รู้ σ → t-test &nbsp;|&nbsp; รู้ σ หรือ n≥30 → z</span></div>
+            <div class="fml-qr"><span class="fml-qr-k">Two-tail 5% z</span><span class="fml-qr-v">±1.960 &nbsp;(one-tail = 1.645)</span></div>
+            <div class="fml-qr"><span class="fml-qr-k">Two-tail 1% z</span><span class="fml-qr-v">±2.576</span></div>
+            <div class="fml-qr"><span class="fml-qr-k">p-value</span><span class="fml-qr-v">p &lt; α → Reject H₀ &nbsp;|&nbsp; p ≥ α → Fail to Reject</span></div>
+            <div class="fml-qr"><span class="fml-qr-k">CI ↔ test</span><span class="fml-qr-v">μ₀ นอก 95% CI ↔ Reject H₀ ที่ α = 0.05</span></div>
+          </div>
+        </div>
+
       </div>
 
       <!-- TOOL 3: QUIZ -->
