@@ -1194,7 +1194,6 @@ function renderAll() {
 /* ---------- INIT ---------- */
 bindTimeBlockActions();
 renderAll();
-if (typeof initCfaStudy === 'function') initCfaStudy();
 
 /* URL params */
 const params = new URLSearchParams(location.search);

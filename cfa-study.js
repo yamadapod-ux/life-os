@@ -416,3 +416,6 @@ function _showResults() {
     document.getElementById('quizStartBtn').addEventListener('click', _startQuiz);
   });
 }
+
+/* ---- AUTO INIT (runs after DOM is ready, scripts loaded in order) ---- */
+initCfaStudy();
