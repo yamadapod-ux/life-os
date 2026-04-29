@@ -30,6 +30,7 @@
     <button class="nav-btn" data-page="pipeline"><span class="icon">📋</span><span>Pipeline</span></button>
     <button class="nav-btn" data-page="meals"><span class="icon">🍱</span><span>มื้ออาหาร</span></button>
     <button class="nav-btn" data-page="wellness"><span class="icon">💚</span><span>Wellness</span></button>
+    <button class="nav-btn" data-page="cfa-study"><span class="icon">📖</span><span>เรียน CFA</span></button>
     <button class="nav-btn" data-page="goals"><span class="icon">🎯</span><span>เป้าหมาย</span></button>
     <div class="sidebar-footer">
       <button class="nav-btn" id="aiBtnSide"><span class="icon">🤖</span><span>AI Assistant</span></button>
@@ -197,6 +198,131 @@
       </div>
     </section>
 
+    <!-- ============ PAGE: CFA STUDY ============ -->
+    <section class="page" id="page-cfa-study">
+      <div class="cat-tabs" id="cfaStudyTabs">
+        <button class="cat-tab active" data-tool="calc">🧮 Calculator</button>
+        <button class="cat-tab" data-tool="flash">🃏 Flashcard</button>
+        <button class="cat-tab" data-tool="quiz">📝 Quiz</button>
+      </div>
+
+      <!-- TOOL 1: CALCULATOR -->
+      <div id="cfaTool-calc" class="cfa-tool">
+        <div class="section">
+          <div class="section-header">
+            <div class="section-title">🧮 Hypothesis Testing Calculator</div>
+          </div>
+          <div class="row" style="gap:8px;margin-bottom:14px;">
+            <button class="btn" id="cfaCalcBtnT">t-test</button>
+            <button class="btn btn-ghost" id="cfaCalcBtnZ">z-test (proportion)</button>
+          </div>
+          <!-- t-test inputs -->
+          <div id="cfaTInputs">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+              <div><div class="text-mute">x̄ (sample mean)</div><input class="field" type="number" id="tXbar" value="1.5" /></div>
+              <div><div class="text-mute">s (sample std)</div><input class="field" type="number" id="tS" value="1.2" min="0.001" /></div>
+              <div><div class="text-mute">n (sample size)</div><input class="field" type="number" id="tN" value="25" min="2" /></div>
+              <div><div class="text-mute">μ₀ (hypothesized mean)</div><input class="field" type="number" id="tMu0" value="2.0" /></div>
+              <div>
+                <div class="text-mute">α (significance level)</div>
+                <select class="field" id="tAlpha">
+                  <option value="0.10">0.10 (10%)</option>
+                  <option value="0.05" selected>0.05 (5%)</option>
+                  <option value="0.01">0.01 (1%)</option>
+                </select>
+              </div>
+              <div>
+                <div class="text-mute">Tail type</div>
+                <select class="field" id="tTail">
+                  <option value="two">Two-tailed (H₁: μ ≠ μ₀)</option>
+                  <option value="upper">Upper (H₁: μ > μ₀)</option>
+                  <option value="lower">Lower (H₁: μ &lt; μ₀)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- z-test inputs -->
+          <div id="cfaZInputs" style="display:none">
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px;">
+              <div><div class="text-mute">p̂ (sample proportion)</div><input class="field" type="number" id="zPhat" value="0.58" step="0.01" /></div>
+              <div><div class="text-mute">p₀ (hypothesized prop.)</div><input class="field" type="number" id="zP0" value="0.50" step="0.01" /></div>
+              <div><div class="text-mute">n (sample size)</div><input class="field" type="number" id="zN" value="100" min="1" /></div>
+              <div>
+                <div class="text-mute">α</div>
+                <select class="field" id="zAlpha">
+                  <option value="0.10">0.10</option>
+                  <option value="0.05" selected>0.05</option>
+                  <option value="0.01">0.01</option>
+                </select>
+              </div>
+              <div style="grid-column:span 2;">
+                <div class="text-mute">Tail type</div>
+                <select class="field" id="zTail">
+                  <option value="two">Two-tailed (H₁: p ≠ p₀)</option>
+                  <option value="upper">Upper (H₁: p > p₀)</option>
+                  <option value="lower">Lower (H₁: p &lt; p₀)</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <button class="btn" id="cfaCalcRun" style="width:100%;margin-top:4px;">คำนวณ →</button>
+          <div id="cfaCalcResult"></div>
+        </div>
+      </div>
+
+      <!-- TOOL 2: FLASHCARD -->
+      <div id="cfaTool-flash" class="cfa-tool" style="display:none">
+        <div class="section">
+          <div class="section-header">
+            <div class="section-title">🃏 Flashcard — Hypothesis Testing</div>
+            <span class="badge" id="flashProgress">รู้แล้ว 0/15</span>
+          </div>
+          <div class="progress" style="margin-bottom:6px;"><div class="progress-fill" id="flashProgressBar" style="width:0%"></div></div>
+          <div style="font-size:12px;color:var(--text-mute);text-align:center;margin-bottom:12px;" id="flashCardNum">1 / 15</div>
+
+          <div id="flashCard" style="min-height:180px;background:var(--bg-elev-2);border-radius:12px;padding:24px;margin-bottom:14px;cursor:pointer;border:1px solid var(--border);display:flex;flex-direction:column;justify-content:center;transition:border-color 0.15s;">
+            <div id="flashFront" style="text-align:center;font-size:15px;font-weight:600;line-height:1.6;display:flex;align-items:center;justify-content:center;"></div>
+            <div id="flashBack" style="display:none;font-size:13px;line-height:1.8;color:var(--text-dim);"></div>
+            <div id="flashDone" style="display:none;text-align:center;flex-direction:column;align-items:center;gap:8px;">
+              <div style="font-size:44px;">🎉</div>
+              <div style="font-size:18px;font-weight:700;color:var(--accent);">ครบทุกใบแล้ว!</div>
+              <div style="font-size:13px;color:var(--text-mute);">กด Reset เพื่อเริ่มใหม่</div>
+            </div>
+          </div>
+
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button class="btn btn-ghost" id="flashFlip" style="flex:1;">พลิกดูเฉลย 🔄</button>
+          </div>
+          <div id="flashRateRow" style="display:none;gap:8px;margin-top:8px;">
+            <button class="btn" id="flashKnow" style="flex:1;">รู้แล้ว ✓</button>
+            <button class="btn btn-ghost" id="flashDontKnow" style="flex:1;border-color:var(--danger);color:var(--danger);">ยังไม่รู้ ✗</button>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:8px;">
+            <div id="flashStats" style="display:flex;gap:12px;font-size:13px;"></div>
+            <button class="btn btn-sm btn-ghost" id="flashReset">Reset</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- TOOL 3: QUIZ -->
+      <div id="cfaTool-quiz" class="cfa-tool" style="display:none">
+        <div class="section">
+          <div class="section-header">
+            <div class="section-title">📝 Practice Quiz — CFA Level 1</div>
+            <span class="badge">10 ข้อ</span>
+          </div>
+          <div id="quizContainer">
+            <div style="text-align:center;padding:20px;">
+              <div style="font-size:40px;margin-bottom:12px;">📝</div>
+              <div style="font-size:15px;color:var(--text-dim);margin-bottom:4px;">10 ข้อ Multiple Choice</div>
+              <div style="font-size:13px;color:var(--text-mute);margin-bottom:20px;">เหมือน CFA Level 1 + เฉลยอธิบายทุกข้อ</div>
+              <button class="btn" id="quizStartBtn" style="width:100%;max-width:280px;">เริ่ม Quiz →</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- ============ PAGE: GOALS ============ -->
     <section class="page" id="page-goals">
       <div class="section">
@@ -241,6 +367,7 @@
     <button class="nav-btn" data-page="pipeline"><span class="icon">📋</span><span>Pipeline</span></button>
     <button class="nav-btn" data-page="meals"><span class="icon">🍱</span><span>มื้อ</span></button>
     <button class="nav-btn" data-page="wellness"><span class="icon">💚</span><span>Wellness</span></button>
+    <button class="nav-btn" data-page="cfa-study"><span class="icon">📖</span><span>CFA</span></button>
     <button class="nav-btn" data-page="goals"><span class="icon">🎯</span><span>เป้า</span></button>
   </nav>
 
@@ -263,6 +390,7 @@
   <input type="file" id="importFile" accept=".json" style="display:none" />
 
   <script src="app.js"></script>
+  <script src="cfa-study.js"></script>
   <script>
     if ('serviceWorker' in navigator) {
       window.addEventListener('load', () => {

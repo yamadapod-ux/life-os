@@ -1,9 +1,10 @@
-const CACHE_NAME = 'life-os-v6';
+const CACHE_NAME = 'life-os-v7';
 const ASSETS = [
   './',
   './index.html',
   './styles.css',
   './app.js',
+  './cfa-study.js',
   './manifest.json',
   './icons/icon-192.png',
   './icons/icon-512.png',

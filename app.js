@@ -216,6 +216,7 @@ const PAGE_TITLES = {
   pipeline: 'Pipeline',
   meals: 'มื้ออาหาร',
   wellness: 'Wellness',
+  'cfa-study': 'เรียน CFA',
   goals: 'เป้าหมาย'
 };
 
@@ -1109,6 +1110,7 @@ $('#fab').addEventListener('click', () => {
   else if (p === 'pipeline') openPipelineModal(null);
   else if (p === 'meals') $('#addRecipeBtn').click();
   else if (p === 'goals') $('#addPersonalGoalBtn').click();
+  else if (p === 'cfa-study') { /* no FAB action */ }
   else openTimeBlockModal(null);
 });
 
@@ -1137,7 +1139,7 @@ document.addEventListener('touchend', () => {
 });
 
 /* ---------- SWIPE GESTURES (mobile) ---------- */
-const PAGES = ['today', 'pipeline', 'meals', 'wellness', 'goals'];
+const PAGES = ['today', 'pipeline', 'meals', 'wellness', 'cfa-study', 'goals'];
 let swipeStartX = 0, swipeStartY = 0;
 document.addEventListener('touchstart', (e) => {
   swipeStartX = e.touches[0].clientX;
@@ -1192,6 +1194,7 @@ function renderAll() {
 /* ---------- INIT ---------- */
 bindTimeBlockActions();
 renderAll();
+if (typeof initCfaStudy === 'function') initCfaStudy();
 
 /* URL params */
 const params = new URLSearchParams(location.search);
