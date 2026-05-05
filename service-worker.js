@@ -1,4 +1,4 @@
-const CACHE_NAME = 'life-os-v8';
+const CACHE_NAME = 'life-os-v9';
 const ASSETS = [
   './',
   './index.html',
@@ -32,6 +32,12 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
+
+  // inbox.json — network first, never cache (ต้องได้ข้อมูลใหม่เสมอ)
+  if (req.url.includes('inbox.json')) {
+    event.respondWith(fetch(req).catch(() => new Response('[]')));
+    return;
+  }
 
   event.respondWith(
     caches.match(req).then((cached) => {
