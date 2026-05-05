@@ -1138,20 +1138,19 @@ async function checkInbox() {
 }
 
 async function updateInboxBadge(items) {
-  let badge = $('#inboxBadge');
-  if (!badge) return;
+  const badges = $$('.inbox-badge');
+  if (!badges.length) return;
   try {
     const src = items || await (await fetch('./inbox.json?t=' + Date.now())).json();
     if (!Array.isArray(DATA.importedInboxIds)) DATA.importedInboxIds = [];
     const count = src.filter((i) => i.id && !DATA.importedInboxIds.includes(i.id)).length;
-    badge.textContent = count || '';
-    badge.style.display = count ? 'inline-flex' : 'none';
-  } catch { badge.style.display = 'none'; }
+    badges.forEach(b => { b.textContent = count || ''; b.style.display = count ? 'inline-block' : 'none'; });
+  } catch { badges.forEach(b => b.style.display = 'none'); }
 }
 
 $('#exportBtnSide').addEventListener('click', exportData);
 $('#importBtnSide').addEventListener('click', importData);
-$('#inboxBtnSide').addEventListener('click', checkInbox);
+$$('.inbox-trigger').forEach(btn => btn.addEventListener('click', checkInbox));
 updateInboxBadge();
 
 $('#menuBtn').addEventListener('click', () => {
