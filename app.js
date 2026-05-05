@@ -465,11 +465,11 @@ function renderPipeline() {
           <span class="text-mute" style="font-size:18px;cursor:grab;">⋮⋮</span>
         </div>
         ${p.note ? `<div class="text-dim" style="margin-bottom:6px;font-size:12px;">${escape(p.note)}</div>` : ''}
+        ${p.fullContent ? `<button class="btn btn-ghost" style="width:100%;margin-bottom:8px;font-size:14px;min-height:40px;" data-act="read">📖 อ่านรายงานเต็ม</button>` : ''}
         <div class="meta">
           <span>${catLabels[p.cat] || p.cat}</span>
           ${dlText}
           <span style="margin-left:auto; display:flex; gap:6px;">
-            ${p.fullContent ? `<button class="btn btn-sm btn-ghost" data-act="read">📖 อ่าน</button>` : ''}
             <button class="btn btn-sm btn-ghost" data-act="edit">แก้</button>
             <button class="btn btn-sm btn-ghost" data-act="del" style="color:var(--danger);">ลบ</button>
           </span>
