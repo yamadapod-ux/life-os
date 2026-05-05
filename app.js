@@ -1162,6 +1162,21 @@ $('#importBtnSide').addEventListener('click', importData);
 $$('.inbox-trigger').forEach(btn => btn.addEventListener('click', checkInbox));
 updateInboxBadge();
 
+// sync fullContent เข้า pipeline items ที่ยังไม่มี (background, ไม่รบกวน UI)
+(async () => {
+  try {
+    const src = await (await fetch('./inbox.json?t=' + Date.now())).json();
+    if (!Array.isArray(src)) return;
+    let changed = false;
+    DATA.pipeline.forEach(p => {
+      if (p.fullContent) return;
+      const match = src.find(i => i.title === p.title && i.fullContent);
+      if (match) { p.fullContent = match.fullContent; changed = true; }
+    });
+    if (changed) { save(); renderPipeline(); }
+  } catch { /* silent */ }
+})();
+
 $('#menuBtn').addEventListener('click', () => {
   openModal('เมนู', `
     <div class="row" style="flex-direction:column; gap:8px;">
