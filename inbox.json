@@ -1,1 +1,20 @@
-[]
+[
+  {
+    "id": "content_2026-05-05_top-down-cpu",
+    "timestamp": "2026-05-05",
+    "source": "Leo-content — Content Team",
+    "cat": "freelance",
+    "title": "🎬 Script พร้อม shoot — CPU ขึ้น 10-20% มันคือสัญญาณอะไร?",
+    "note": "Format: TikTok/Shorts (75 วิ) | CFA: Top-Down Investing\nFile: content/scripts/2026-05-05-script1-top-down-cpu.md",
+    "deadline": "2026-05-06"
+  },
+  {
+    "id": "content_2026-05-05_concentration-risk-taiwan",
+    "timestamp": "2026-05-05",
+    "source": "Leo-content — Content Team",
+    "cat": "freelance",
+    "title": "🎬 Script พร้อม shoot — 90%+ ของชิปโลกมาจากที่เดียว",
+    "note": "Format: TikTok/Shorts (80 วิ) | CFA: Portfolio Concentration Risk\nFile: content/scripts/2026-05-05-script2-concentration-risk-taiwan.md",
+    "deadline": "2026-05-06"
+  }
+]
