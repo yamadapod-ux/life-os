@@ -644,6 +644,7 @@ button { cursor: pointer; }
 }
 
 .modal h3 { margin-bottom: 14px; font-size: 18px; }
+.modal.modal-wide { max-width: 780px; max-height: 92vh; }
 
 .modal-actions {
   display: flex;
