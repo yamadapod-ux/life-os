@@ -1086,17 +1086,18 @@ async function checkInbox() {
   if (!pending.length) { toast('ไม่มีงานใหม่จาก Agents'); return; }
 
   const catLabels = { cfa: '📚 CFA', investment: '💹 บลจ.', freelance: '💼 Content', personal: '🌱 Personal' };
-  const rows = pending.map((i) => `
+  const rows = pending.map((i, idx) => `
     <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
       <div style="font-weight:600;margin-bottom:4px;">${i.title}</div>
       <div style="font-size:12px;color:var(--accent);margin-bottom:4px;">${catLabels[i.cat] || i.cat} · ${i.source || ''}</div>
-      ${i.note ? `<div style="font-size:12px;color:var(--text-mute);white-space:pre-line;">${i.note}</div>` : ''}
+      ${i.note ? `<div style="font-size:12px;color:var(--text-mute);white-space:pre-line;margin-bottom:6px;">${i.note}</div>` : ''}
+      ${i.fullContent ? `<button class="btn btn-ghost" style="font-size:11px;padding:3px 10px;" data-inbox-read="${idx}">📖 อ่านเนื้อหา</button>` : ''}
     </div>
   `).join('');
 
   openModal(
     `📥 Inbox — ${pending.length} รายการใหม่`,
-    `<div style="max-height:320px;overflow-y:auto;">${rows}</div>`,
+    `<div style="max-height:360px;overflow-y:auto;">${rows}</div>`,
     () => {
       pending.forEach((i) => {
         DATA.pipeline.push({ id: uid(), cat: i.cat || 'investment', title: i.title, note: i.note || '', deadline: i.deadline || '', done: false });
@@ -1106,7 +1107,21 @@ async function checkInbox() {
       toast(`เพิ่ม ${pending.length} รายการเข้า Pipeline แล้ว`);
       updateInboxBadge(items);
     },
-    () => { $('#modalConfirm').textContent = `เพิ่ม ${pending.length} รายการเข้า Pipeline`; }
+    () => {
+      $('#modalConfirm').textContent = `เพิ่ม ${pending.length} รายการเข้า Pipeline`;
+      $('#modalBody').addEventListener('click', (e) => {
+        const btn = e.target.closest('[data-inbox-read]');
+        if (!btn) return;
+        const item = pending[Number(btn.dataset.inboxRead)];
+        if (!item) return;
+        openModal(
+          item.title,
+          `<div style="max-height:60vh;overflow-y:auto;white-space:pre-wrap;font-family:var(--font-mono,monospace);font-size:12px;line-height:1.7;color:var(--text);">${item.fullContent}</div>`,
+          () => {},
+          () => { $('#modalConfirm').textContent = 'ปิด'; }
+        );
+      });
+    }
   );
 }
 
