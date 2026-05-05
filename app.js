@@ -526,7 +526,7 @@ $('#pipelineList')?.addEventListener('click', (e) => {
     const item = DATA.pipeline[idx];
     openModal(
       item.title,
-      `<div style="max-height:65vh;overflow-y:auto;white-space:pre-wrap;font-size:14px;line-height:1.8;color:var(--text);font-family:inherit;">${item.fullContent.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`,
+      `<div style="max-height:65vh;overflow-y:auto;white-space:pre-wrap;font-size:16px;line-height:1.9;color:var(--text);font-family:inherit;">${item.fullContent.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`,
       () => {},
       () => { $('#modalConfirm').textContent = 'ปิด'; }
     );
@@ -1114,7 +1114,7 @@ async function checkInbox() {
             <div style="font-weight:600;margin-bottom:3px;">${hesc(item.title)}</div>
             <div style="font-size:11px;color:var(--text-mute);white-space:pre-line;margin-bottom:6px;">${hesc(item.note||'')}</div>
             ${item.fullContent ? `<button class="btn btn-ghost" style="font-size:11px;padding:2px 10px;" data-itoggle="${idx}">📖 อ่านเนื้อหา</button>
-            <div id="ic${idx}" style="display:none;margin-top:8px;max-height:320px;overflow-y:auto;background:var(--surface);border-radius:6px;padding:12px;white-space:pre-wrap;font-size:14px;line-height:1.8;color:var(--text);">${hesc(item.fullContent)}</div>` : ''}
+            <div id="ic${idx}" style="display:none;margin-top:8px;max-height:320px;overflow-y:auto;background:var(--surface);border-radius:6px;padding:12px;white-space:pre-wrap;font-size:16px;line-height:1.9;color:var(--text);">${hesc(item.fullContent)}</div>` : ''}
           </div>`;
       }).join('')}
     </div>`;
