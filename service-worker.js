@@ -1,4 +1,4 @@
-const CACHE_NAME = 'life-os-v9';
+const CACHE_NAME = 'life-os-v10';
 const ASSETS = [
   './',
   './index.html',
@@ -33,25 +33,29 @@ self.addEventListener('fetch', (event) => {
   const req = event.request;
   if (req.method !== 'GET') return;
 
-  // inbox.json — network first, never cache (ต้องได้ข้อมูลใหม่เสมอ)
-  if (req.url.includes('inbox.json')) {
-    event.respondWith(fetch(req).catch(() => new Response('[]')));
-    return;
-  }
-
-  event.respondWith(
-    caches.match(req).then((cached) => {
-      const fetchPromise = fetch(req)
+  // network-first: JS files + inbox.json — ต้องได้ใหม่เสมอ
+  if (req.url.includes('.js') || req.url.includes('inbox.json')) {
+    event.respondWith(
+      fetch(req)
         .then((res) => {
-          if (res && res.status === 200 && res.type === 'basic') {
-            const clone = res.clone();
-            caches.open(CACHE_NAME).then((cache) => cache.put(req, clone));
+          if (res && res.status === 200) {
+            caches.open(CACHE_NAME).then((c) => c.put(req, res.clone()));
           }
           return res;
         })
-        .catch(() => cached);
-      return cached || fetchPromise;
-    })
+        .catch(() => caches.match(req))
+    );
+    return;
+  }
+
+  // cache-first: fonts, icons, css
+  event.respondWith(
+    caches.match(req).then((cached) => cached || fetch(req).then((res) => {
+      if (res && res.status === 200 && res.type === 'basic') {
+        caches.open(CACHE_NAME).then((c) => c.put(req, res.clone()));
+      }
+      return res;
+    }))
   );
 });
 
