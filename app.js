@@ -1085,21 +1085,36 @@ async function checkInbox() {
 
   if (!pending.length) { toast('ไม่มีงานใหม่จาก Agents'); return; }
 
-  const catLabels = { cfa: '📚 CFA', investment: '💹 บลจ.', freelance: '💼 Content', personal: '🌱 Personal' };
-  const rows = pending.map((i, idx) => `
-    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
-      <div style="font-weight:600;margin-bottom:4px;">${i.title}</div>
-      <div style="font-size:12px;color:var(--accent);margin-bottom:4px;">${catLabels[i.cat] || i.cat} · ${i.source || ''}</div>
-      ${i.note ? `<div style="font-size:12px;color:var(--text-mute);white-space:pre-line;margin-bottom:6px;">${i.note}</div>` : ''}
-      ${i.fullContent ? `<button class="btn btn-ghost" style="font-size:11px;padding:3px 10px;" data-inbox-read="${idx}">📖 อ่านเนื้อหา</button>` : ''}
-    </div>
-  `).join('');
+  function hesc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+  const groups = [
+    { label: '💹 บลจ. — Investment Team', items: pending.filter(i => i.cat === 'investment') },
+    { label: '💼 Content Team',           items: pending.filter(i => i.cat === 'freelance') },
+    { label: '📋 อื่นๆ',                   items: pending.filter(i => i.cat !== 'investment' && i.cat !== 'freelance') }
+  ].filter(g => g.items.length);
+
+  const renderGroup = (g) => `
+    <div style="margin-bottom:16px;">
+      <div style="font-size:12px;font-weight:700;color:var(--accent);letter-spacing:.5px;padding-bottom:6px;margin-bottom:8px;border-bottom:1px solid var(--border);">
+        ${g.label} · ${g.items.length} รายการ
+      </div>
+      ${g.items.map(item => {
+        const idx = pending.indexOf(item);
+        return `
+          <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+            <div style="font-weight:600;margin-bottom:3px;">${hesc(item.title)}</div>
+            <div style="font-size:11px;color:var(--text-mute);white-space:pre-line;margin-bottom:6px;">${hesc(item.note||'')}</div>
+            ${item.fullContent ? `<button class="btn btn-ghost" style="font-size:11px;padding:2px 10px;" data-itoggle="${idx}">📖 อ่านเนื้อหา</button>
+            <div id="ic${idx}" style="display:none;margin-top:8px;max-height:280px;overflow-y:auto;background:var(--surface);border-radius:6px;padding:10px;white-space:pre-wrap;font-size:11px;line-height:1.65;color:var(--text);">${hesc(item.fullContent)}</div>` : ''}
+          </div>`;
+      }).join('')}
+    </div>`;
 
   openModal(
     `📥 Inbox — ${pending.length} รายการใหม่`,
-    `<div style="max-height:360px;overflow-y:auto;">${rows}</div>`,
+    `<div style="max-height:440px;overflow-y:auto;padding-right:2px;">${groups.map(renderGroup).join('')}</div>`,
     () => {
-      pending.forEach((i) => {
+      pending.forEach(i => {
         DATA.pipeline.push({ id: uid(), cat: i.cat || 'investment', title: i.title, note: i.note || '', deadline: i.deadline || '', done: false });
         DATA.importedInboxIds.push(i.id);
       });
@@ -1109,17 +1124,14 @@ async function checkInbox() {
     },
     () => {
       $('#modalConfirm').textContent = `เพิ่ม ${pending.length} รายการเข้า Pipeline`;
-      $('#modalBody').addEventListener('click', (e) => {
-        const btn = e.target.closest('[data-inbox-read]');
+      $('#modalBody').addEventListener('click', e => {
+        const btn = e.target.closest('[data-itoggle]');
         if (!btn) return;
-        const item = pending[Number(btn.dataset.inboxRead)];
-        if (!item) return;
-        openModal(
-          item.title,
-          `<div style="max-height:60vh;overflow-y:auto;white-space:pre-wrap;font-family:var(--font-mono,monospace);font-size:12px;line-height:1.7;color:var(--text);">${item.fullContent}</div>`,
-          () => {},
-          () => { $('#modalConfirm').textContent = 'ปิด'; }
-        );
+        const div = document.getElementById('ic' + btn.dataset.itoggle);
+        if (!div) return;
+        const open = div.style.display !== 'none';
+        div.style.display = open ? 'none' : 'block';
+        btn.textContent = open ? '📖 อ่านเนื้อหา' : '📕 ซ่อน';
       });
     }
   );
