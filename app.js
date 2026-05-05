@@ -464,11 +464,12 @@ function renderPipeline() {
           <span>${escape(p.title)}</span>
           <span class="text-mute" style="font-size:18px;cursor:grab;">⋮⋮</span>
         </div>
-        ${p.note ? `<div class="text-dim" style="margin-bottom:6px;">${escape(p.note)}</div>` : ''}
+        ${p.note ? `<div class="text-dim" style="margin-bottom:6px;font-size:12px;">${escape(p.note)}</div>` : ''}
         <div class="meta">
           <span>${catLabels[p.cat] || p.cat}</span>
           ${dlText}
           <span style="margin-left:auto; display:flex; gap:6px;">
+            ${p.fullContent ? `<button class="btn btn-sm btn-ghost" data-act="read">📖 อ่าน</button>` : ''}
             <button class="btn btn-sm btn-ghost" data-act="edit">แก้</button>
             <button class="btn btn-sm btn-ghost" data-act="del" style="color:var(--danger);">ลบ</button>
           </span>
@@ -521,6 +522,14 @@ $('#pipelineList')?.addEventListener('click', (e) => {
     DATA.pipeline.splice(idx, 1); save(); renderPipeline(); toast('ลบแล้ว');
   } else if (btn.dataset.act === 'edit') {
     openPipelineModal(DATA.pipeline[idx]);
+  } else if (btn.dataset.act === 'read') {
+    const item = DATA.pipeline[idx];
+    openModal(
+      item.title,
+      `<div style="max-height:65vh;overflow-y:auto;white-space:pre-wrap;font-size:14px;line-height:1.8;color:var(--text);font-family:inherit;">${item.fullContent.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</div>`,
+      () => {},
+      () => { $('#modalConfirm').textContent = 'ปิด'; }
+    );
   }
 });
 
@@ -1105,7 +1114,7 @@ async function checkInbox() {
             <div style="font-weight:600;margin-bottom:3px;">${hesc(item.title)}</div>
             <div style="font-size:11px;color:var(--text-mute);white-space:pre-line;margin-bottom:6px;">${hesc(item.note||'')}</div>
             ${item.fullContent ? `<button class="btn btn-ghost" style="font-size:11px;padding:2px 10px;" data-itoggle="${idx}">📖 อ่านเนื้อหา</button>
-            <div id="ic${idx}" style="display:none;margin-top:8px;max-height:280px;overflow-y:auto;background:var(--surface);border-radius:6px;padding:10px;white-space:pre-wrap;font-size:11px;line-height:1.65;color:var(--text);">${hesc(item.fullContent)}</div>` : ''}
+            <div id="ic${idx}" style="display:none;margin-top:8px;max-height:320px;overflow-y:auto;background:var(--surface);border-radius:6px;padding:12px;white-space:pre-wrap;font-size:14px;line-height:1.8;color:var(--text);">${hesc(item.fullContent)}</div>` : ''}
           </div>`;
       }).join('')}
     </div>`;
@@ -1115,7 +1124,7 @@ async function checkInbox() {
     `<div style="max-height:440px;overflow-y:auto;padding-right:2px;">${groups.map(renderGroup).join('')}</div>`,
     () => {
       pending.forEach(i => {
-        DATA.pipeline.push({ id: uid(), cat: i.cat || 'investment', title: i.title, note: i.note || '', deadline: i.deadline || '', done: false });
+        DATA.pipeline.push({ id: uid(), cat: i.cat || 'investment', title: i.title, note: i.note || '', deadline: i.deadline || '', done: false, fullContent: i.fullContent || '' });
         DATA.importedInboxIds.push(i.id);
       });
       save(); renderPipeline();
