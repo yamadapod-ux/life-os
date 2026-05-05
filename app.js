@@ -73,7 +73,8 @@ const DEFAULT_DATA = {
     { id: 2, title: 'เรียน CFA 3 ชม./วัน ต่อเนื่อง (วัน)', target: 90, current: 0 }
   ],
   monthlyReview: '',
-  uiState: { activePage: 'today', activeCat: 'all' }
+  uiState: { activePage: 'today', activeCat: 'all' },
+  importedInboxIds: []
 };
 
 /* ---------- DEFAULT DAILY SCHEDULE (real, not sample) ---------- */
@@ -1067,8 +1068,73 @@ $('#importFile').addEventListener('change', (e) => {
   e.target.value = '';
 });
 
+/* ---------- AGENT INBOX ---------- */
+async function checkInbox() {
+  let items;
+  try {
+    const res = await fetch('./inbox.json?t=' + Date.now());
+    if (!res.ok) throw new Error('not found');
+    items = await res.json();
+  } catch {
+    toast('ไม่พบ inbox.json — รัน Life OS ผ่าน localhost ก่อน');
+    return;
+  }
+
+  if (!Array.isArray(DATA.importedInboxIds)) DATA.importedInboxIds = [];
+  const pending = items.filter((i) => i.id && !DATA.importedInboxIds.includes(i.id));
+
+  if (!pending.length) {
+    toast('ไม่มีงานใหม่จาก Agents');
+    return;
+  }
+
+  const catLabels = { cfa: '📚 CFA', investment: '💹 บลจ.', freelance: '💼 Content', personal: '🌱 Personal' };
+  const rows = pending.map((i) => `
+    <div style="background:var(--surface2);border-radius:8px;padding:10px 12px;margin-bottom:8px;">
+      <div style="font-weight:600;margin-bottom:4px;">${escape(i.title)}</div>
+      <div style="font-size:12px;color:var(--accent);margin-bottom:4px;">${catLabels[i.cat] || i.cat} · ${i.source || ''}</div>
+      ${i.note ? `<div style="font-size:12px;color:var(--text-mute);white-space:pre-line;">${escape(i.note)}</div>` : ''}
+    </div>
+  `).join('');
+
+  openModal(`📥 Inbox — ${pending.length} รายการใหม่`,
+    `<div style="max-height:320px;overflow-y:auto;">${rows}</div>`,
+    () => closeModal(),
+    () => {
+      const confirmBtn = document.createElement('button');
+      confirmBtn.className = 'btn btn-primary';
+      confirmBtn.textContent = `เพิ่มทั้งหมด (${pending.length}) เข้า Pipeline`;
+      confirmBtn.addEventListener('click', () => {
+        pending.forEach((i) => {
+          DATA.pipeline.push({ id: uid(), cat: i.cat || 'investment', title: i.title, note: i.note || '', deadline: i.deadline || '', done: false });
+          DATA.importedInboxIds.push(i.id);
+        });
+        save(); renderPipeline();
+        closeModal();
+        toast(`เพิ่ม ${pending.length} รายการเข้า Pipeline แล้ว`);
+        updateInboxBadge(items);
+      });
+      document.querySelector('#modal .btn-row')?.prepend(confirmBtn);
+    }
+  );
+}
+
+async function updateInboxBadge(items) {
+  let badge = $('#inboxBadge');
+  if (!badge) return;
+  try {
+    const src = items || await (await fetch('./inbox.json?t=' + Date.now())).json();
+    if (!Array.isArray(DATA.importedInboxIds)) DATA.importedInboxIds = [];
+    const count = src.filter((i) => i.id && !DATA.importedInboxIds.includes(i.id)).length;
+    badge.textContent = count || '';
+    badge.style.display = count ? 'inline-flex' : 'none';
+  } catch { badge.style.display = 'none'; }
+}
+
 $('#exportBtnSide').addEventListener('click', exportData);
 $('#importBtnSide').addEventListener('click', importData);
+$('#inboxBtnSide').addEventListener('click', checkInbox);
+updateInboxBadge();
 
 $('#menuBtn').addEventListener('click', () => {
   openModal('เมนู', `
