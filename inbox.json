@@ -164,5 +164,15 @@
     "blendedFV": 414.0,
     "version": "v4-corrected",
     "reportFile": "reports/GOOGL_2026-05-21.md"
+  },
+  {
+    "id": "PORTFOLIO_REVIEW_2026-06-06",
+    "timestamp": "2026-06-06",
+    "source": "Max -- Portfolio Manager",
+    "cat": "investment",
+    "title": "Portfolio Review 2026-06-06 (June-5 close)",
+    "note": "Total $9,986.29 (-0.14%) | Alpha +0.07% FIRST POSITIVE | S&P500 -0.21% | Cash 64.38% | 7 positions | GOOGL STOP WATCH 18.9% | RDDT MOS-2.5% S&P excluded | ADBE CEO planned transition (earnings June 11) | ACN +0.05% stable | Files: dashboard/portfolio.js + portfolio/positions.md",
+    "deadline": "2026-06-08",
+    "fullContent": "Portfolio Review June 5 2026 close. Prices verified: ADBE $251.44, NOW $112.45, GOOGL $368.53, CRM $185.66, RDDT $173.45, REGN $635.45, ACN $178.25. S&P500 $7383.74. Alpha +0.07% vs S&P500 -0.21% since inception."
   }
 ]
